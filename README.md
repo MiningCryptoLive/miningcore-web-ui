@@ -4,8 +4,8 @@
 
 ## Links:
 
-+ [Live Preview](http://demos.creative-tim.com/paper-dashboard/dashboard.html)
-+ [Paper Dashboard PRO](http://www.creative-tim.com/product/paper-dashboard-pro?ref=pd-free-upgrade-github) (from $39)
++ [Live Preview] ergo.miningcrypto.live (https://ergo.miningcrypto.live)
+
 
 ## Quick start
 
