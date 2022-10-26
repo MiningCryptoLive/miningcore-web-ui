@@ -466,34 +466,30 @@ function loadBlocksList() {
 }
 
 function loadPaymentsList() {
-    return $.ajax(API + 'pools/' + currentPool + '/payments?pageSize=500')
-        .done(function (data) {
-            var paymentList = '<thead><tr><th rowspan="2">Date &amp; Time</th><th>Address</th><th>Amount</th></tr><tr><th style="display: none"></th><th colspan="2">Confirmation</th></tr></thead><tbody>';
-            if (data.length > 0) {
-                $.each(data, function (index, value) {
-                    paymentList += '<tr>';
-                    paymentList += '<td rowspan="2">' + new Date(value.created).toLocaleString() + '</td>';
-                    paymentList += '<td><a href="' + value.addressInfoLink + '" target="_blank">' + value.address.substring(0, 12) + ' &hellip; ' + value.address.substring(value.address.length - 12) + '</td>';
-                    paymentList += '<td>' + _formatter(value.amount, 5, '') + '</td>';
-                    paymentList += '</tr><tr><td style="display: none"></td>';
-                    paymentList += '<td colspan="2"><a href="' + value.transactionInfoLink + '" target="_blank">' + value.transactionConfirmationData.substring(0, 16) + ' &hellip; ' + value.transactionConfirmationData.substring(value.transactionConfirmationData.length - 16) + ' </a></td>';
-                    paymentList += '</tr>';
-                });
-            } else {
-                paymentList += '<tr><td colspan="3">None</td></tr>';
-            }
-            paymentList += '</tbody>';
-            $('#paymentList').html(paymentList);
-        })
-        .fail(function () {
-            $.notify({
-                icon: "ti-cloud-down",
-                message: "Error: No response from API.<br>(loadPaymentsList)",
-            }, {
-                type: 'danger',
-                timer: 3000,
-            });
-        });
+  	return $.ajax(API + "pools/" + currentPool + "/payments?page=0&pageSize=500")
+	.done(function(data) {
+	var paymentList = "";
+	if (data.length > 0) {
+	$.each(data, function(index, value) {
+	var createDate = convertLocalDateToUTCDate(new Date(value.created),false);
+		paymentList += '<tr>';
+		paymentList += "<td>" + createDate + "</td>";
+		paymentList += '<td><a href="' + value.addressInfoLink + '" target="_blank">' + value.address.substring(0, 12) + ' &hellip; ' + value.address.substring(value.address.length - 12) + '</td>';
+		paymentList += '<td>' + _formatter(value.amount, 5, '') + '</td>';
+		paymentList += '<td colspan="2"><a href="' + value.transactionInfoLink + '" target="_blank">' + value.transactionConfirmationData.substring(0, 16) + ' &hellip; ' + value.transactionConfirmationData.substring(value.transactionConfirmationData.length - 16) + ' </a></td>';
+		paymentList += '</tr>';
+	});
+	} else {
+		paymentList += '<tr><td colspan="4">No Payments Made Yet</td></tr>';
+	}
+	$("#paymentList").html(paymentList);
+	})
+	.fail(function() {
+	$.notify(
+	{message: "Error: No response from API.<br>(loadPaymentsList)"},
+	{type: "danger",timer: 3000}
+	);
+	});
 }
 
 function loadConnectConfig() {
